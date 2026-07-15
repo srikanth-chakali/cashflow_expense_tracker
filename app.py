@@ -433,13 +433,7 @@ def download_csv():
 
     @app.route("/sitemap.xml")
     def sitemap():
-        xml = """<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        <url>
-            <loc>https://cashflow-expense-tracker.vercel.app/</loc>
-        </url>
-    </urlset>"""
-        return Response(xml, mimetype="application/xml")
+        return app.send_static_file("sitemap.xml")
 
 
 if __name__ == "__main__":
