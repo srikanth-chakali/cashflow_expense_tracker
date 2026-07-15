@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}CashFlow | Dashboard{% endblock %}
+{% block content %}
+
+<div class="topnav">
+    <div class="logo-block" style="margin-bottom:0;">
+        <div class="logo-mark">₹</div>
+        <div>
+            <div class="logo-title">CASHFLOW</div>
+            <div class="logo-subtitle">FINANCIAL DASHBOARD</div>
+        </div>
+    </div>
+    <a href="{{ url_for('logout') }}" class="btn btn-ghost">⏻&nbsp;&nbsp;LOGOUT</a>
+</div>
+
+<!-- ADD EXPENSE -->
+<div class="section-header">
+    <span class="icon">➕</span>
+    <span class="title">New Expense</span>
+    <div class="rule"></div>
+</div>
+<form method="POST" action="{{ url_for('add_expense_route') }}">
+    <div class="form-row">
+        <div class="form-group tight">
+            <label>Date</label>
+            <input class="form-input" type="date" name="expense_date" required>
+        </div>
+        <div class="form-group tight">
+            <label>Category</label>
+            <select class="form-select" name="category">
+                <option>Food</option>
+                <option>Transport</option>
+                <option>Shopping</option>
+                <option>Utilities</option>
+                <option>Entertainment</option>
+            </select>
+        </div>
+        <div class="form-group tight">
+            <label>Payment Mode</label>
+            <select class="form-select" name="payment">
+                <option>Cash</option>
+                <option>Card</option>
+                <option>UPI</option>
+            </select>
+        </div>
+        <div class="form-group tight">
+            <label>Amount (₹)</label>
+            <input class="form-input" type="number" min="0" step="0.01" name="amount" required>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <input class="form-input" type="text" name="description" placeholder="optional note">
+        </div>
+        <div class="form-group tight">
+            <button type="submit" class="btn btn-block">⚡ Add Expense</button>
+        </div>
+    </div>
+</form>
+
+<!-- ADD INCOME -->
+<div class="section-header">
+    <span class="icon">💵</span>
+    <span class="title">Log Income</span>
+    <div class="rule"></div>
+</div>
+<form method="POST" action="{{ url_for('add_income_route') }}">
+    <div class="form-row">
+        <div class="form-group tight">
+            <label>Income Amount (₹)</label>
+            <input class="form-input" type="number" min="0" step="0.01" name="amount" required>
+        </div>
+        <div class="form-group tight">
+            <button type="submit" class="btn btn-block">💰 Add Income</button>
+        </div>
+    </div>
+</form>
+
+{% if not has_expenses %}
+    <div class="empty-state">
+        <div class="emoji">📊</div>
+        <div class="msg">No expenses yet — start tracking above</div>
+    </div>
+{% else %}
+
+    <div class="section-header">
+        <span class="icon">📈</span>
+        <span class="title">Overview</span>
+        <div class="rule"></div>
+    </div>
+    <div class="metric-grid">
+        <div class="stat-card">
+            <div class="glow" style="background: radial-gradient(circle, #ff2d7822, transparent 70%);"></div>
+            <div class="stat-icon">🔴</div>
+            <div class="stat-value" style="color:#ff2d78;">₹{{ "%.2f"|format(total_expense) }}</div>
+            <div class="stat-label">Total Expenses</div>
+        </div>
+        <div class="stat-card">
+            <div class="glow" style="background: radial-gradient(circle, #00ff9d22, transparent 70%);"></div>
+            <div class="stat-icon">🟢</div>
+            <div class="stat-value" style="color:#00ff9d;">₹{{ "%.2f"|format(total_income) }}</div>
+            <div class="stat-label">Total Income</div>
+        </div>
+        <div class="stat-card">
+            <div class="glow" style="background: radial-gradient(circle, {{ '#00ff9d22' if savings >= 0 else '#ff2d7822' }}, transparent 70%);"></div>
+            <div class="stat-icon">{{ '✨' if savings >= 0 else '⚠️' }}</div>
+            <div class="stat-value" style="color:{{ '#00ff9d' if savings >= 0 else '#ff2d78' }};">₹{{ "%.2f"|format(savings) }}</div>
+            <div class="stat-label">Net Savings</div>
+        </div>
+    </div>
+
+    <div style="height:1.5rem"></div>
+
+    <div class="section-header">
+        <span class="icon">🍩</span>
+        <span class="title">Spending by Category</span>
+        <div class="rule"></div>
+    </div>
+    <div id="category-chart" style="height:420px;"></div>
+
+    <div class="section-header">
+        <span class="icon">🧾</span>
+        <span class="title">Transaction History</span>
+        <div class="rule"></div>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Payment</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in expenses %}
+                <tr>
+                    <td>{{ e.expense_date }}</td>
+                    <td>{{ e.category }}</td>
+                    <td>{{ e.payment }}</td>
+                    <td>₹{{ "%.2f"|format(e.amount) }}</td>
+                    <td>{{ e.description or "" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="height:1rem"></div>
+    <a href="{{ url_for('download_csv') }}" class="btn btn-download">⬇ Download CSV</a>
+
+{% endif %}
+
+<div class="land-footer">CASHFLOW — Your financial clarity engine</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+{% if has_expenses %}
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>
+const categoryLabels = {{ category_labels|tojson }};
+const categoryValues = {{ category_values|tojson }};
+const totalExpense = {{ total_expense }};
+
+const data = [{
+    labels: categoryLabels,
+    values: categoryValues,
+    type: 'pie',
+    hole: 0.55,
+    marker: {
+        colors: ["#00ff9d", "#7c3aff", "#ff2d78", "#fbbf24", "#38bdf8"],
+        line: { color: "#030712", width: 3 }
+    },
+    textfont: { family: "DM Mono", size: 11, color: "#e2e8f0" },
+    hovertemplate: "<b>%{label}</b><br>₹%{value:,.2f}<br>%{percent}<extra></extra>"
+}];
+
+const layout = {
+    paper_bgcolor: "rgba(0,0,0,0)",
+    plot_bgcolor: "rgba(0,0,0,0)",
+    font: { family: "Outfit", color: "#e2e8f0" },
+    margin: { t: 10, b: 10, l: 10, r: 10 },
+    showlegend: true,
+    legend: {
+        bgcolor: "rgba(0,0,0,0)",
+        font: { family: "Outfit", size: 13, color: "#94a3b8" },
+        orientation: "h",
+        y: -0.08
+    },
+    annotations: [{
+        text: "₹" + totalExpense.toLocaleString(undefined, {maximumFractionDigits: 0}),
+        x: 0.5, y: 0.5,
+        font: { family: "DM Mono", size: 20, color: "#e2e8f0" },
+        showarrow: false
+    }],
+    height: 420
+};
+
+Plotly.newPlot('category-chart', data, layout, {displayModeBar: false, responsive: true});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}CashFlow | Sign In{% endblock %}
+{% block content %}
+
+<div class="logo-block">
+    <div class="logo-mark">₹</div>
+    <div>
+        <div class="logo-title">CASHFLOW</div>
+        <div class="logo-subtitle">WELCOME BACK</div>
+    </div>
+</div>
+
+<a href="{{ url_for('landing') }}" class="btn btn-ghost" style="margin-bottom:24px; display:inline-block;">← Back to home</a>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-card-head">
+            <div class="auth-card-title">Sign in to your vault</div>
+            <div class="auth-card-sub">YOUR MONEY, YOUR STORY</div>
+        </div>
+
+        <div class="tabs" style="margin-bottom: 8px;">
+            <button type="button" class="tab-btn {{ 'active' if active_tab != 'register' else '' }}" onclick="showTab('login')" id="tab-btn-login">→ LOGIN</button>
+            <button type="button" class="tab-btn {{ 'active' if active_tab == 'register' else '' }}" onclick="showTab('register')" id="tab-btn-register">→ REGISTER</button>
+        </div>
+
+        <div class="tab-panel {{ 'active' if active_tab != 'register' else '' }}" id="tab-panel-login">
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label>Username</label>
+                    <input class="form-input" type="text" name="username" placeholder="enter your username" required>
+                </div>
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label>Password</label>
+                    <input class="form-input" type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-block">Login →</button>
+            </form>
+            <a class="forgot-link" href="mailto:chhip09876@gmail.com">Forgot Password? Contact Support</a>
+        </div>
+
+        <div class="tab-panel {{ 'active' if active_tab == 'register' else '' }}" id="tab-panel-register">
+            <form method="POST" action="{{ url_for('register') }}">
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label>New Username</label>
+                    <input class="form-input" type="text" name="username" placeholder="choose a username" required>
+                </div>
+                <div class="form-group" style="margin-bottom:14px;">
+                    <label>New Password</label>
+                    <input class="form-input" type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-block">Create Account →</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function showTab(tab) {
+    document.getElementById('tab-panel-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-panel-register').classList.toggle('active', tab === 'register');
+    document.getElementById('tab-btn-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-btn-register').classList.toggle('active', tab === 'register');
+}
+</script>
+{% endblock %}

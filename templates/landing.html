@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="topnav">
+    <div class="logo-block" style="margin-bottom:0;">
+        <div class="logo-mark">₹</div>
+        <div>
+            <div class="logo-title">CASHFLOW</div>
+            <div class="logo-subtitle">PERSONAL FINANCE, SIMPLIFIED</div>
+        </div>
+    </div>
+    <div class="nav-actions">
+        <a href="{{ url_for('auth', tab='login') }}" class="btn">Log In</a>
+        <a href="{{ url_for('auth', tab='register') }}" class="btn btn-outline">Sign Up</a>
+    </div>
+</div>
+
+<div class="land-hero-center">
+    <div class="land-eyebrow">● FREE TO GET STARTED</div>
+    <div class="land-title">Know exactly where<br>your <span>money goes</span>.</div>
+    <div class="land-sub">
+        CashFlow is a personal expense tracker that turns every rupee you spend
+        into a clear, visual story. Log expenses and income in seconds, watch
+        your spending sort itself into categories, and see your real savings
+        update instantly &mdash; no spreadsheets, no guesswork.
+    </div>
+    <div class="land-stats">
+        <div>
+            <div class="land-stat-num">100%</div>
+            <div class="land-stat-label">Private &amp; Encrypted</div>
+        </div>
+        <div>
+            <div class="land-stat-num">₹0</div>
+            <div class="land-stat-label">Cost To Use</div>
+        </div>
+        <div>
+            <div class="land-stat-num">3</div>
+            <div class="land-stat-label">Steps To Start</div>
+        </div>
+    </div>
+</div>
+
+<div class="section-header">
+    <span class="icon">✦</span>
+    <span class="title">What You Get</span>
+    <div class="rule"></div>
+</div>
+<div class="land-features">
+    <div class="land-feature-card">
+        <div class="land-feature-icon" style="background:#00ff9d1a; color:#00ff9d;">💳</div>
+        <div class="land-feature-title">Expense Logging</div>
+        <div class="land-feature-desc">Add every purchase with date, category, payment mode and notes in a few taps.</div>
+    </div>
+    <div class="land-feature-card">
+        <div class="land-feature-icon" style="background:#7c3aff1a; color:#7c3aff;">💵</div>
+        <div class="land-feature-title">Income Tracking</div>
+        <div class="land-feature-desc">Record every rupee coming in so your savings number is always accurate.</div>
+    </div>
+    <div class="land-feature-card">
+        <div class="land-feature-icon" style="background:#ff2d781a; color:#ff2d78;">🍩</div>
+        <div class="land-feature-title">Visual Breakdown</div>
+        <div class="land-feature-desc">An interactive chart shows exactly which categories are eating your budget.</div>
+    </div>
+    <div class="land-feature-card">
+        <div class="land-feature-icon" style="background:#38bdf81a; color:#38bdf8;">🔒</div>
+        <div class="land-feature-title">Private Vault</div>
+        <div class="land-feature-desc">Passwords are hashed with bcrypt and every account only sees its own data.</div>
+    </div>
+</div>
+
+<div style="height:1rem"></div>
+
+<div class="section-header">
+    <span class="icon">⚙</span>
+    <span class="title">How It Works</span>
+    <div class="rule"></div>
+</div>
+<div class="land-how">
+    <div>
+        <div class="land-step">
+            <div class="land-step-num">1</div>
+            <div>
+                <div class="land-step-title">Create your free account</div>
+                <div class="land-step-desc">Sign up with a username and password &mdash; no card, no email verification, no cost.</div>
+            </div>
+        </div>
+        <div class="land-step">
+            <div class="land-step-num">2</div>
+            <div>
+                <div class="land-step-title">Log expenses &amp; income</div>
+                <div class="land-step-desc">Add a transaction whenever you spend or earn; pick a category and payment mode.</div>
+            </div>
+        </div>
+        <div class="land-step">
+            <div class="land-step-num">3</div>
+            <div>
+                <div class="land-step-title">Watch your dashboard update</div>
+                <div class="land-step-desc">Totals, savings and the category chart refresh instantly with every entry.</div>
+            </div>
+        </div>
+    </div>
+    <div class="land-benefits">
+        <div class="land-benefits-title">Why people stick with CashFlow</div>
+        <div class="land-benefit-list">
+            <div class="land-benefit-item">
+                <span class="check">✓</span>
+                <span class="text">See your <b>real savings</b>, not just spending, calculated automatically from income minus expenses.</span>
+            </div>
+            <div class="land-benefit-item">
+                <span class="check">✓</span>
+                <span class="text">Spot overspending fast with a live category chart instead of scrolling through bank statements.</span>
+            </div>
+            <div class="land-benefit-item">
+                <span class="check">✓</span>
+                <span class="text">Export your full transaction history to CSV any time you need it for taxes or budgeting.</span>
+            </div>
+            <div class="land-benefit-item">
+                <span class="check">✓</span>
+                <span class="text">Every account is password-protected with bcrypt hashing &mdash; your data stays yours.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="land-cta">
+    <div class="land-cta-title">Start tracking your money today</div>
+    <div class="land-cta-sub">It takes less than a minute to create an account and log your first expense.</div>
+    <div class="land-cta-actions">
+        <a href="{{ url_for('auth', tab='register') }}" class="btn">Create Free Account →</a>
+    </div>
+</div>
+
+<div class="land-footer">CASHFLOW — Your financial clarity engine</div>
+
+{% endblock %}
